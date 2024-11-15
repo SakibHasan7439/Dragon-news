@@ -3,14 +3,29 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../Provider/AuthProvider";
 
 const Login = () => {
-    const { name } = useContext(AuthContext);
-    console.log(name);
+    const { userSignIn } = useContext(AuthContext);
+
+    const handleUserSignIn = (e)=>{
+      e.preventDefault();
+      const form = new FormData(e.target);
+      const email = form.get("email");
+      const password = form.get("password");
+
+      userSignIn(email, password)
+      .then((userCredential)=>{
+        console.log(userCredential.user);
+      })
+      .catch((err)=>{
+        console.log("ERROR", err.message);
+      })
+    }
+
   return (
     <div className="hero bg-base-200 min-h-screen">
         <div className="text-center lg:text-left">
         </div>
         <div className="card bg-base-100 rounded-none w-full max-w-lg shrink-0 shadow-2xl">
-          <form className="card-body">
+          <form onSubmit={handleUserSignIn} className="card-body">
             <h2 className="text-black font-semibold text-center text-xl">Login Your account</h2>
             <div className="form-control">
               <label className="label">
